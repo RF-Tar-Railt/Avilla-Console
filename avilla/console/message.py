@@ -2,7 +2,6 @@ from typing import Union, Optional, Iterator
 from dataclasses import dataclass, field, asdict
 
 from graia.amnesia.message import MessageChain as BaseMessageChain
-from graia.amnesia import message
 from graia.amnesia.message.element import Element, Text as BaseText
 from rich.console import Console, ConsoleOptions, JustifyMethod, RenderResult
 from rich.emoji import Emoji as RichEmoji
