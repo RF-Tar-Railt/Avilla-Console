@@ -1,0 +1,24 @@
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+dev = [
+    "creart-graia>=0.1.5",
+]
+
+[project]
+name = "avilla-console"
+version = "0.1.0"
+description = "Avilla Console Protocol"
+authors = [
+    {name = "RF-Tar-Railt", email = "rf_tar_railt@qq.com"},
+]
+dependencies = [
+    "avilla-core>=1.0.0a5",
+    "textual~=0.10.1",
+]
+requires-python = ">=3.9"
+readme = "README.md"
+license = {text = "AGPL-3.0"}
+
+[build-system]
+requires = ["pdm-pep517>=1.0"]
+build-backend = "pdm.pep517.api"
