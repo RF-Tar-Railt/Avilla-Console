@@ -103,6 +103,15 @@ class Markdown(Element):
     def rich(self) -> RichMarkdown:
         return RichMarkdown(**asdict(self))
 
+    def __str__(self) -> str:
+        return str(
+            RichText.from_markup(
+                self.markup,
+                style=self.style,
+                end="",
+            )
+        )
+
     def __rich_console__(
         self, console: "Console", options: "ConsoleOptions"
     ) -> "RenderResult":
