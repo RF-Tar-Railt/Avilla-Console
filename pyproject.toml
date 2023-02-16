@@ -1,9 +1,3 @@
-[tool.pdm]
-[tool.pdm.dev-dependencies]
-dev = [
-    "creart-graia>=0.1.5",
-]
-
 [project]
 name = "avilla-console"
 version = "0.1.0"
@@ -22,3 +16,12 @@ license = {text = "AGPL-3.0"}
 [build-system]
 requires = ["pdm-pep517>=1.0"]
 build-backend = "pdm.pep517.api"
+
+
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+dev = [
+    "creart-graia>=0.1.5",
+]
+[tool.pdm.build]
+includes=["avilla/console"]
