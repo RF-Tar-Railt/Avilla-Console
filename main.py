@@ -19,10 +19,13 @@ async def on_message_received(ctx: Context, event: MessageReceived):
             [Markdown("""\
 ## 菜单
 - /help
+- /echo
 - /md
 - /emoji
 """
             )])
+    elif msg.startswith("/echo"):
+        await ctx.scene.send_message(event.message.content.removeprefix("/echo "))
     elif msg == "/md":
         await ctx.scene.send_message(
             [Markdown("""\
