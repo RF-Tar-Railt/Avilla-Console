@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 class ConsoleEventMessagePerform((m := AccountCollector())._):
     m.post_applying = True
 
-    @ConsoleEventParse.collect(m, "console.message")
+    @ConsoleEventParse.collect(m, "console.message", MessageEvent)
     async def console_message(self, raw_event: MessageEvent):
         message = await ConsoleStaff(self.account).deserialize_message(raw_event.message)
         console = Selector().land(self.account.route["land"]).console(str(raw_event.user.id))

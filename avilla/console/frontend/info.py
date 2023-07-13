@@ -9,7 +9,7 @@ class User:
     """用户"""
 
     id: str
-    avatar: str = field(default="👤")
+    avatar: str = field(default="😃")
     nickname: str = field(default="User")
 
 

@@ -14,6 +14,7 @@ class HorizontalView(Widget):
         layout: horizontal;
         height: 100%;
         width: 100%;
+        background: rgba(40, 44, 52, 1);
     }
 
     HorizontalView > * {

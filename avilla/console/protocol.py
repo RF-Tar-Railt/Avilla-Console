@@ -14,9 +14,10 @@ if TYPE_CHECKING:
 
 class ConsoleProtocol(BaseProtocol):
     service: ConsoleService
-    #
-    # def __init__(self):
-    #     self.service = ConsoleService(self)
+    name: str
+
+    def __init__(self, name: str = "robot"):
+        self.name = name
 
     @classmethod
     def __init_isolate__(cls):  # ruff: noqa: F401

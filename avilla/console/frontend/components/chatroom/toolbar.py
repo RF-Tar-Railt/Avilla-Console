@@ -34,7 +34,7 @@ class Toolbar(Widget):
         width: 3;
     }
     Toolbar Action.ml {
-        margin-left: 2;
+        margin-left: 4;
     }
     Toolbar Action.mr {
         margin-right: 4;
@@ -43,7 +43,7 @@ class Toolbar(Widget):
 
     def __init__(self):
         super().__init__()
-        self.exit_button = Action("❌", id="exit", classes="left")
+        self.exit_button = Action("⛔", id="exit", classes="left")
         self.clear_button = Action("🗑️", id="clear", classes="left ml")
         self.center_title = Static("Chat", classes="center")
         self.settings_button = Action("⚙️", id="settings", classes="right mr")

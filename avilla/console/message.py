@@ -1,13 +1,14 @@
-from typing import Union, Iterator
+from typing import Union, Iterator, Sequence
 
 from graia.amnesia.message import MessageChain as BaseMessageChain
 from graia.amnesia.message.element import Element
 from rich.console import Console, ConsoleOptions, RenderResult
 from rich.measure import Measurement, measure_renderables
 from rich.segment import Segment
-from .element import Text, Emoji, Markup, Markdown
+from .element import Text, Emoji, Markup, Markdown, ConsoleElement
 
-class ConsoleMessage(BaseMessageChain):
+class ConsoleMessage(BaseMessageChain, Sequence[ConsoleElement]):
+    content: list[Union[Text, Emoji, Markup, Markdown]]
 
     def __init__(self, elements: list[Element]):
         """从传入的序列(可以是元组 tuple, 也可以是列表 list) 创建消息链.
@@ -22,6 +23,9 @@ class ConsoleMessage(BaseMessageChain):
 
     def __iter__(self) -> Iterator[Union[Text, Emoji, Markup, Markdown]]:
         yield from self.content
+
+    def __reversed__(self)-> Iterator[Union[Text, Emoji, Markup, Markdown]]:
+        yield from reversed(self.content)
 
     def __rich_console__(
         self, console: "Console", options: "ConsoleOptions"

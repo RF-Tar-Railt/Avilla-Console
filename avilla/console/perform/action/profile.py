@@ -16,13 +16,13 @@ class ConsoleProfileActionPerform((m := ContextCollector["ConsoleProtocol", "Con
     m.post_applying = True
 
     @m.pull("lang.console", Nick)
-    async def get_console_nick(self, target: Selector | None) -> Nick:
+    async def get_console_nick(self, target: Selector | None, r: type[Nick]) -> Nick:
         assert target is not None
         console = self.account.client.storage.current_user
         return Nick(console.nickname, console.nickname, "")
 
     @m.pull("lang.console", Summary)
-    async def get_summary(self, target: Selector | None) -> Summary:
+    async def get_summary(self, target: Selector | None, r: type[Summary]) -> Summary:
         assert target is not None
         console = self.account.client.storage.current_user
         return Summary(

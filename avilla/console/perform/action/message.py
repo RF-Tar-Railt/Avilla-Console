@@ -36,7 +36,7 @@ class ConsoleMessageActionPerform((m := ContextCollector["ConsoleProtocol", "Con
             "send_msg",
             {
                 "message": serialized_msg,
-                "info": Robot("console")
+                "info": Robot(self.protocol.name)
             }
         )
         logger.info(  # TODO: wait for solution of ActiveMessage
@@ -46,7 +46,7 @@ class ConsoleMessageActionPerform((m := ContextCollector["ConsoleProtocol", "Con
         )
         message_metadata = Message(
             id=str(datetime.now().timestamp()),
-            scene=Selector().land(self.account.route["land"]).console(str(target.pattern["console"])),
+            scene=target,
             content=message,
             time=datetime.now(),
             sender=self.account.route,

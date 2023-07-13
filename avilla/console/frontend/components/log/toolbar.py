@@ -27,20 +27,27 @@ class Toolbar(Widget):
     Toolbar Action {
         width: 3;
     }
+    Toolbar Action.ml {
+        margin-left: 4;
+    }
     """
 
     def __init__(self):
         super().__init__()
-        self.back_button = Action("⬅️", id="back", classes="left")
+        self.exit_button = Action("⛔", id="exit", classes="left")
+        self.back_button = Action("⏪", id="back", classes="left ml")
         self.settings_button = Action("⚙️", id="settings", classes="right")
 
     def compose(self):
+        yield self.exit_button
         yield self.back_button
         yield Static("Log", classes="center")
         yield self.settings_button
 
     async def on_action_pressed(self, event: Action.Pressed):
         event.stop()
+        if event.action == self.exit_button:
+            self.app.exit()
         if event.action == self.back_button:
             self.post_message(RouteChange("main"))
         elif event.action == self.settings_button:

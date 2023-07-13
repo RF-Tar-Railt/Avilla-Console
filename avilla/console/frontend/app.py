@@ -37,8 +37,8 @@ class Frontend(App):
     def __init__(self, protocol: "ConsoleProtocol"):
         super().__init__()
         self.protocol = protocol
-        self.title = "Avilla"  # type: ignore
-        self.sub_title = "Welcome to console"  # type: ignore
+        self.title = "Console"  # type: ignore
+        self.sub_title = "Welcome to Avilla"  # type: ignore
         self.account = ConsoleAccount(protocol)
         self.storage = Storage()
 

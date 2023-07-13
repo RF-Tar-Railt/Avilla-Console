@@ -23,13 +23,13 @@ class ConsoleStaff(Staff):
         if sign not in self.artifacts:
             return
 
-        record: tuple[Any, Callable[[Any, dict], Awaitable[AvillaEvent | None]]] = self.artifacts[sign]
+        record: tuple[Any, Callable[[Any, ConsoleEvent], Awaitable[AvillaEvent | None]]] = self.artifacts[sign]
 
         async with use_record(self.components, record) as entity:
             return await entity(data)
 
     async def serialize_message(self, message: MessageChain) -> ConsoleMessage:
-        result: list[ConsoleElement] = []
+        result: list[Element] = []
         for element in message.content:
             element_type = type(element)
             sign = MessageSerializeSign(element_type)

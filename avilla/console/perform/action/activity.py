@@ -1,15 +1,11 @@
 from __future__ import annotations
 
-from datetime import datetime
 from typing import TYPE_CHECKING
 
-from avilla.core.message import Message
 from avilla.core.ryanvk.collector.context import ContextCollector
 from avilla.core.selector import Selector
 from avilla.standard.core.activity import ActivityTrigger
-from loguru import logger
-from ...frontend.info import Robot
-from ...staff import ConsoleStaff
+
 
 if TYPE_CHECKING:
     from ...account import ConsoleAccount  # noqa
@@ -20,5 +16,5 @@ class ConsoleActivityActionPerform((m := ContextCollector["ConsoleProtocol", "Co
     m.post_applying = True
 
     @ActivityTrigger.trigger.collect(m, "land.console")
-    async def bell(self):
+    async def bell(self, target: Selector | None = None):
         await self.account.call("bell")

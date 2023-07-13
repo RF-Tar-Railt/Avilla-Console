@@ -30,7 +30,7 @@ class ConsoleAccount(BaseAccount):
     status: AccountStatus
 
     def __init__(self, protocol: ConsoleProtocol):
-        super().__init__(Selector().land("console").account("user"), protocol.avilla)
+        super().__init__(Selector().land("console").account(protocol.name), protocol.avilla)
         self.protocol = protocol
         self.status = AccountStatus()
         self.protocol.avilla.accounts[self.route] = AccountInfo(
