@@ -5,8 +5,8 @@ from textual.widget import Widget
 from textual.widgets import Static
 from rich.console import RenderableType
 
-from avilla.console.utils import truncate
-from avilla.console.frontend.info import User, MessageEvent
+from ...utils import truncate
+from ...info import User, MessageEvent
 
 
 class Timer(Widget):
@@ -159,7 +159,7 @@ class Bubble(Widget):
     $bubble-border-type: round;
     $bubble-border-color: rgba(170, 170, 170, 0.7);
     $bubble-border: $bubble-border-type $bubble-border-color;
-    
+
     Bubble {
         height: auto;
         width: auto;

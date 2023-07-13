@@ -1,22 +1,24 @@
+import asyncio
 import contextlib
-from datetime import datetime
-from typing import Any, Dict, TextIO, Optional, cast, TYPE_CHECKING
 import sys
-from textual.app import App, Reactive
-from textual.widgets import Input
-from textual.binding import Binding
-from loguru import logger
+from datetime import datetime
+from typing import TYPE_CHECKING, Any, Dict, Optional, TextIO, cast
 
 from avilla.console.account import ConsoleAccount
 from avilla.console.message import ConsoleMessage, Text
-from .info import MessageEvent, Event
-from .storage import Storage
-from .router import RouterView
-from .log_redirect import FakeIO
-from .views.log_view import LogView
+from loguru import logger
+from textual.app import App
+from textual.binding import Binding
+from textual.widgets import Input
+
 from .components.footer import Footer
 from .components.header import Header
+from .info import Event, MessageEvent
+from .log_redirect import FakeIO
+from .router import RouterView
+from .storage import Storage
 from .views.horizontal import HorizontalView
+from .views.log_view import LogView
 
 if TYPE_CHECKING:
     from avilla.console.protocol import ConsoleProtocol
@@ -35,8 +37,8 @@ class Frontend(App):
     def __init__(self, protocol: "ConsoleProtocol"):
         super().__init__()
         self.protocol = protocol
-        self.title = "Avilla"#Reactive("Avilla")
-        self.sub_title = "Welcome to console"#Reactive("Welcome to console")
+        self.title = "Avilla"  # type: ignore
+        self.sub_title = "Welcome to console"  # type: ignore
         self.account = ConsoleAccount(protocol)
         self.storage = Storage()
 
@@ -61,6 +63,7 @@ class Frontend(App):
             level=0,
             diagnose=False
         )
+        self.account.status.enabled = True
 
     def on_mount(self):
         with contextlib.suppress(Exception):
@@ -92,6 +95,7 @@ class Frontend(App):
                 colorize=True,
             )
             self._should_restore_logger = False
+        self.account.status.enabled = False
         logger.success("Console exit.")
         logger.warning("Press Ctrl-C for Application exit")
 
@@ -99,7 +103,7 @@ class Frontend(App):
         if api == "send_msg":
             self.storage.write_chat(
                 MessageEvent(
-                    type="message",
+                    type="console.message",
                     time=datetime.now(),
                     self_id=data["info"].id,
                     message=data["message"],
@@ -107,7 +111,7 @@ class Frontend(App):
                 )
             )
         elif api == "bell":
-            await self.action("bell")
+            await self.run_action("bell")
 
     def action_focus_input(self):
         with contextlib.suppress(Exception):
@@ -115,17 +119,15 @@ class Frontend(App):
 
     async def action_post_message(self, message: str):
         msg = MessageEvent(
-            type="message",
+            type="console.message",
             time=datetime.now(),
-            self_id=self.account.id,
+            self_id=self.account.route["account"],
             message=ConsoleMessage([Text(message)]),
             user=self.storage.current_user
         )
         self.storage.write_chat(msg)
-        event, context = await self.protocol.parse_event(self.account, msg, error=True)
-        self.protocol.post_event(event, context)
+        asyncio.create_task(self.protocol.parse_event(self.account, msg))
 
     async def action_post_event(self, event: Event):
-        avilla_event, context = await self.protocol.parse_event(self.account, event, error=True)
-        self.protocol.post_event(avilla_event, context)
+        asyncio.create_task(self.protocol.parse_event(self.account, event))
 

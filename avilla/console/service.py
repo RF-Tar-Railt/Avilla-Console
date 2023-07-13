@@ -1,51 +1,25 @@
 from __future__ import annotations
+
 import asyncio
-from typing import TYPE_CHECKING, Set, Literal
-from launart import Launart, Service, ExportInterface
-from .frontend import Frontend
-from .message import ConsoleMessage, Text
+from typing import TYPE_CHECKING
+from avilla.console.frontend import Frontend
+from launart import Launart, Launchable
 
 if TYPE_CHECKING:
     from .protocol import ConsoleProtocol
 
 
-class ConsoleInterface(ExportInterface["ConsoleService"]):
-    def __init__(self, service: ConsoleService):
-        self.service = service
-
-    def send(self, content: str):
-        from .frontend.info import Robot
-        self.service.app.call(
-            "send_msg",
-            {
-                "message": ConsoleMessage([Text(content)]),
-                "info": Robot("console")
-            }
-        )
-
-
-class ConsoleService(Service):
+class ConsoleService(Launchable):
     id = "console.service"
-    supported_interface_types = {ConsoleInterface}
-
-    protocol: ConsoleProtocol
+    required: set[str] = set()
+    stages: set[str] = {"preparing", "blocking", "cleanup"}
     app: Frontend
+    protocol: ConsoleProtocol
 
     def __init__(self, protocol: ConsoleProtocol):
-        self.protocol = protocol
         self.app = Frontend(protocol)
+        self.protocol = protocol
         super().__init__()
-
-    def get_interface(self, interface_type) -> ConsoleInterface:
-        return ConsoleInterface(self)
-
-    @property
-    def required(self):
-        return {}
-
-    @property
-    def stages(self) -> Set[Literal["preparing", "blocking", "cleanup"]]:
-        return {"preparing", "blocking", "cleanup"}
 
     async def launch(self, manager: Launart):
         async with self.stage("preparing"):
@@ -53,8 +27,7 @@ class ConsoleService(Service):
 
         async with self.stage("blocking"):
             task = asyncio.create_task(self.app.run_async())
-            ...
-
+            await manager.status.wait_for_sigexit()
         async with self.stage("cleanup"):
             self.app.exit()
             if task:

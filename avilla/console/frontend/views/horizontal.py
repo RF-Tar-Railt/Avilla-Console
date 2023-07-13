@@ -51,10 +51,10 @@ class HorizontalView(Widget):
         self._toggle_log_panel()
 
     def responsive(self, width: int) -> None:
-        self.can_show_log = width > SHOW_LOG_BREAKPOINT
+        self.can_show_log = width > SHOW_LOG_BREAKPOINT  # type: ignore
 
     def action_toggle_log_panel(self):
-        self.show_log = not self.show_log
+        self.show_log = not self.show_log  # type: ignore
 
     def _toggle_log_panel(self):
         show = self.can_show_log and self.show_log
