@@ -8,7 +8,7 @@ from avilla.console.message import Markdown, Emoji
 
 broadcast = create(Broadcast)
 launart = Launart()
-avilla = Avilla(broadcast, launart, [ConsoleProtocol()])
+avilla = Avilla(broadcast, launart, [ConsoleProtocol()], message_cache_size=0)
 
 
 @broadcast.receiver(MessageReceived)
