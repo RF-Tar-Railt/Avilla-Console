@@ -1,3 +1,4 @@
+from abc import abstractmethod, ABCMeta
 from typing import Union, Optional
 from dataclasses import dataclass, field, asdict
 
@@ -11,27 +12,34 @@ from rich.style import Style
 from rich.text import Text as RichText
 
 
-class Text(BaseText):
-
+class ConsoleElement(Element, metaclass=ABCMeta):
     @property
-    def rich(self) -> RichText:
-        return RichText(self.text, end="")
+    @abstractmethod
+    def rich(self) -> Union[RichText, RichEmoji, RichMarkdown]:
+        pass
 
     def __str__(self) -> str:
         return str(self.rich)
 
     def __rich_console__(
-        self, console: "Console", options: "ConsoleOptions"
+            self, console: "Console", options: "ConsoleOptions"
     ) -> "RenderResult":
         yield self.rich
 
     def __rich_measure__(
-        self, console: "Console", options: "ConsoleOptions"
+            self, console: "Console", options: "ConsoleOptions"
     ) -> Measurement:
         return measure_renderables(console, options, (self.rich,))
 
 
-class Emoji(Element):
+class Text(BaseText, ConsoleElement):
+
+    @property
+    def rich(self) -> RichText:
+        return RichText(self.text, end="")
+
+
+class Emoji(ConsoleElement):
     name: str
 
     def __init__(self, name: str):
@@ -41,22 +49,9 @@ class Emoji(Element):
     def rich(self) -> RichEmoji:
         return RichEmoji(self.name)
 
-    def __str__(self) -> str:
-        return str(self.rich)
-
-    def __rich_console__(
-        self, console: "Console", options: "ConsoleOptions"
-    ) -> "RenderResult":
-        yield self.rich
-
-    def __rich_measure__(
-        self, console: "Console", options: "ConsoleOptions"
-    ) -> Measurement:
-        return measure_renderables(console, options, (self.rich,))
-
 
 @dataclass
-class Markup(Element):
+class Markup(ConsoleElement):
     markup: str
     style: Union[str, Style] = field(default="none")
     emoji: bool = field(default=True)
@@ -72,22 +67,9 @@ class Markup(Element):
             end="",
         )
 
-    def __str__(self) -> str:
-        return str(self.rich)
-
-    def __rich_console__(
-        self, console: "Console", options: "ConsoleOptions"
-    ) -> "RenderResult":
-        yield self.rich
-
-    def __rich_measure__(
-        self, console: "Console", options: "ConsoleOptions"
-    ) -> Measurement:
-        return measure_renderables(console, options, (self.rich,))
-
 
 @dataclass
-class Markdown(Element):
+class Markdown(ConsoleElement):
     markup: str
     code_theme: str = field(default="monokai")
     justify: Optional[JustifyMethod] = field(default=None)
@@ -108,15 +90,3 @@ class Markdown(Element):
                 end="",
             )
         )
-
-    def __rich_console__(
-        self, console: "Console", options: "ConsoleOptions"
-    ) -> "RenderResult":
-        yield self.rich
-
-    def __rich_measure__(
-        self, console: "Console", options: "ConsoleOptions"
-    ) -> Measurement:
-        return measure_renderables(console, options, (self.rich,))
-
-ConsoleElement = Union[Text, Emoji, Markup, Markdown]

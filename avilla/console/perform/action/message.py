@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 from avilla.core.message import Message
-from avilla.core.ryanvk.collector.context import ContextCollector
+from avilla.core.ryanvk.collector.account import AccountCollector
 from avilla.core.selector import Selector
 from avilla.standard.core.message import MessageSend
 from graia.amnesia.message import MessageChain
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from ...protocol import ConsoleProtocol  # noqa
 
 
-class ConsoleMessageActionPerform((m := ContextCollector["ConsoleProtocol", "ConsoleAccount"]())._):
+class ConsoleMessageActionPerform((m := AccountCollector["ConsoleProtocol", "ConsoleAccount"]())._):
     m.post_applying = True
 
     @MessageSend.send.collect(m, "land.console")
@@ -32,7 +32,7 @@ class ConsoleMessageActionPerform((m := ContextCollector["ConsoleProtocol", "Con
             assert isinstance(self.protocol, ConsoleProtocol)
         serialized_msg = await ConsoleStaff(self.account).serialize_message(message)
 
-        await self.account.call(
+        await self.account.client.call(
             "send_msg",
             {
                 "message": serialized_msg,

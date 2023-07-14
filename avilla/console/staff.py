@@ -11,8 +11,8 @@ from avilla.core.event import AvillaEvent
 from graia.amnesia.message import MessageChain
 from graia.amnesia.message.element import Element
 from avilla.console.message import ConsoleMessage
-from avilla.console.element import ConsoleElement
 from avilla.console.frontend.info import Event as ConsoleEvent
+
 class ConsoleStaff(Staff):
     async def parse_event(
         self,
