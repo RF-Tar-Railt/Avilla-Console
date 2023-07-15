@@ -45,7 +45,7 @@ class ConsoleEventMessagePerform(
         return MessageReceived(
             context,
             Message(
-                id=str(raw_event.time.timestamp()),
+                id=raw_event.msg_id,
                 scene=console,
                 sender=console,
                 content=message,
