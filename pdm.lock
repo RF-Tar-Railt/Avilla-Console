@@ -215,7 +215,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 lock_version = "4.2"
 cross_platform = true
 groups = ["default", "dev"]
-content_hash = "sha256:3b0b864f30e77f25823b6afc2b4d00b170e541e1f1ebeeaaf74dc56db5fb5294"
+content_hash = "sha256:f1e6e88a4c8f5d027f27e6725c3d8796e1224551c5c62bc8c62542ec3e10d7d0"
 
 [metadata.files]
 "avilla-core 1.0.0a5" = [

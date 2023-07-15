@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING, cast
 
-from textual.binding import Binding
 from textual.widget import Widget
 from textual.widgets import Input
+from textual.binding import Binding
 
 if TYPE_CHECKING:
     from ...app import Frontend
@@ -34,7 +34,7 @@ class InputBox(Widget):
     """
 
     BINDINGS = [
-        Binding("escape", "reset_focus", "Reset focus", show=False),
+        Binding("escape", "blur", "Reset focus", show=False),
     ]
 
     def __init__(self):
@@ -53,5 +53,5 @@ class InputBox(Widget):
         self.input.value = ""
         await self.app.action_post_message(event.value)
 
-    def action_reset_focus(self):
-        self.input.reset_focus()
+    def action_blur(self):
+        self.input.blur()
