@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from secrets import token_hex
 from typing import TYPE_CHECKING
 
 from avilla.core.ryanvk.collector.account import AccountCollector
@@ -43,8 +43,4 @@ class ConsoleMessageActionPerform(
         logger.info(
             f"{self.account.route['land']}: [send]" f"[Console]" f" <- {str(message)!r}"
         )
-        return (
-            Selector()
-            .land(self.account.route["land"])
-            .message(f"{datetime.now().timestamp()}#N")
-        )
+        return Selector().land(self.account.route["land"]).message(token_hex(16))
